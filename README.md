@@ -1,5 +1,5 @@
 # Py3tftp
-
+# Modified the original project to fit my needs. When a fortigate firewall uploads the config via TFTP, instead of creating a file I changed it to write the information to a postgres database.
 Py3tftp is an asynchronous [TFTP][1] server written in Python 3. It was written for the pure joy of working with Python 3 and implements [RFC 1350][2] (except _mail_ mode), [RFC 2347][3] (options), [RFC 2348][4] (blksize option), [RFC 2349][5] (timeout, tsize), and [RFC 7440][10] (windowsize) for RRQ. Additionally, it supports block number roll over, so files of any size can be transferred over.
 
 While a toy project, it does adhere to enough of the standards to be useful in real life.
