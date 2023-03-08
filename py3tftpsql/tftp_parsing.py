@@ -1,6 +1,6 @@
 import logging
 
-from py3tftp.exceptions import BadRequest, UnacknowledgedOption
+from py3tftpsql.exceptions import BadRequest, UnacknowledgedOption
 
 
 """
@@ -34,10 +34,12 @@ def validate_req(fname, mode, opts, supported_opts=None, default_opts=None):
                 logger.debug(e)
             except ValueError:
                 logger.debug(
-                    ('Client passed malformed option "{0}": "{1}", '
-                     'ignoring').format(option, value))
+                    ('Client passed malformed option "{0}": "{1}", ' "ignoring").format(
+                        option, value
+                    )
+                )
 
-    return (fname.decode(encoding='ascii'), mode, acknowledged_options)
+    return (fname.decode(encoding="ascii"), mode, acknowledged_options)
 
 
 def parse_req(req):
@@ -48,7 +50,7 @@ def parse_req(req):
     """
     logger.debug("Request: {}".format(req))
     try:
-        fname, mode, *opts = [item for item in req.split(b'\x00') if item]
+        fname, mode, *opts = [item for item in req.split(b"\x00") if item]
     except ValueError:
         raise BadRequest("Could not parse request: {}".format(req))
     options = dict(zip(opts[::2], opts[1::2]))
@@ -65,7 +67,9 @@ def blksize_parser(val, lower_bound=8, upper_bound=65464):
     elif value < lower_bound:
         raise UnacknowledgedOption(
             'Requested blksize "{0}" below RFC-spec limit ({1})'.format(
-                value, lower_bound))
+                value, lower_bound
+            )
+        )
     else:
         return value
 
@@ -78,8 +82,10 @@ def timeout_parser(val, lower_bound=1, upper_bound=255):
 
     if value > upper_bound or value < lower_bound:
         raise UnacknowledgedOption(
-            ('Requested timeout "{0}" outside of RFC-spec range '
-             '({1} - {2})').format(value, lower_bound, upper_bound))
+            ('Requested timeout "{0}" outside of RFC-spec range ' "({1} - {2})").format(
+                value, lower_bound, upper_bound
+            )
+        )
     else:
         return value
 
@@ -99,6 +105,8 @@ def windowsize_parser(val, lower_bound=1, upper_bound=65535):
     elif value < lower_bound:
         raise UnacknowledgedOption(
             'Requested windowsize "{0}" below RFC-spec limit ({1})'.format(
-                value, lower_bound))
+                value, lower_bound
+            )
+        )
     else:
         return value

@@ -1,5 +1,5 @@
 from setuptools import setup
-from py3tftp import __version__
+
 
 try:
     import pypandoc
@@ -14,8 +14,8 @@ def readme():
 
 
 setup(
-    name="py3tftp-sql",
-    version=__version__,
+    name="py3tftpsql",
+    version="1.0.1",
     description="Python 3 asynchronous TFTP server.",
     long_description=readme(),
     long_description_content_type="text/markdown",
@@ -24,9 +24,9 @@ setup(
     author_email="matt@mattscodecave.com",
     license="MIT",
     keywords="async asynchronous tftp",
-    packages=["py3tftp"],
+    packages=["py3tftpsql"],
     include_package_data=True,
-    entry_points={"console_scripts": ["py3tftp = py3tftp.__main__:main"]},
+    entry_points={"console_scripts": ["py3tftpsql = py3tftpsql.__main__:main"]},
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",

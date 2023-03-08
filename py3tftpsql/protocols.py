@@ -1,11 +1,11 @@
 import asyncio
 import logging
 
-from py3tftp import file_io
-from py3tftp import tftp_parsing
-from py3tftp.exceptions import ProtocolException
-from py3tftp.tftp_packet import TFTPPacketFactory
-from py3tftp.database import connect_database
+from py3tftpsql import file_io
+from py3tftpsql import tftp_parsing
+from py3tftpsql.exceptions import ProtocolException
+from py3tftpsql.tftp_packet import TFTPPacketFactory
+from py3tftpsql.database import connect_database
 import re
 from rich import print
 
@@ -244,7 +244,7 @@ class WRQProtocol(BaseTFTPProtocol):
         super().__init__(wrq, file_handler_cls, addr, opts)
         logger.info("Initiating WRQProtocol with {0}".format(self.remote_addr))
         self.data = b""  # Initialize empty byte string to hold incoming data
-        
+
     def next_datagram(self):
         """
         Builds an acknowledgement of a received data packet.
@@ -287,12 +287,15 @@ class WRQProtocol(BaseTFTPProtocol):
                 # Decode firewall config
                 firewall_config = self.data.decode("utf-8")
                 # Extract hostname from firewall config
-                hostname = re.search(r'hostname:\s*"(.+?)"', firewall_config).group(1)
+                hostname = re.search(r'set hostname "([^"]+)"', firewall_config).group(
+                    1
+                )
                 # Write firewall config to database
                 with connect_database() as db:
                     results = db.insert_data(hostname=hostname, config=firewall_config)
-                    print(f'[bold green]Firewall {hostname} configuration uploaded to database.[/bold green]')
-                    
+                    print(
+                        f"[bold green]Firewall {hostname} configuration uploaded to database.[/bold green]"
+                    )
 
         else:
             logger.debug(
